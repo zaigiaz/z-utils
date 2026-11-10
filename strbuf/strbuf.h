@@ -13,14 +13,14 @@
 
 // static buffer of medium size for path or basic string manipulation tasks
 typedef struct {
-  u8 data[MAX_SIZE+1];
+  char data[MAX_SIZE+1];
   size_t len;
   size_t capacity;
 } strbuf;
 
 // pointer into the string buffer with a length
 typedef struct {
-  const u8 * data;
+  const char* data;
   size_t len;
 } strview;
 

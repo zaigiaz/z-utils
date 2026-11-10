@@ -1,7 +1,7 @@
 #ifndef CSV_PARSER
 #define CSV_PARSER
 
-#include "strbuf/strbuf.h"
+#include "../strbuf/strbuf.h"
 
 // csv_reader assumes that there is no csv_header according the RFC rules
 // if there is then just be aware that we will return a line of strings or potentially malformed data otherwise for now
@@ -40,14 +40,27 @@ typedef struct {
 
 // for defining the csv schema. Max of 32 fields
 typedef struct {
-  u8 dsl_str[32+1]; 
+  char dsl_str[32+1]; 
   u8 len;
 } dsl_rdr;
+
+union data_t {
+  i32 number_t;
+  f32 float_t;
+  char * str_t;
+  bool bool_t;
+};
+
+typedef struct result_list result_list;
+struct result_list {
+  csv_type tok_type;
+  union data_t data;
+  result_list * next;
+}; 
 
 void csv_rdr_init();
 bool is_delim(csv_rdr* r, char c);
 void dsl_parse(dsl_rdr * d, const char* c);
-void buf_slurp(strbuf * buf, const char *f_name);
 
 bool is_delim(csv_rdr *r, char c) {
     return c == r->delim || c == '\n' || c == '\r';
@@ -82,30 +95,6 @@ void dsl_parse(dsl_rdr * d, const char* str) {
   }
   return;
 }
-
-// slurp up file contents, one 4kb chunk at a time.
-void buf_slurp(strbuf * buf, const char *f_name) 
-{
-  FILE *fp;
-  fp = fopen(f_name, "rb");
-
-  fseek(fp, 0L, SEEK_END);
-  u64 file_size = ftell(fp);
-  rewind(fp);
-
-  // TODO :: implement this for strbuf
-  /* s8 *string = malloc(sizeof(s8)); */
-  /* string->data = malloc(buf_size); */
-  /* string->len = buf_size; */
-
-  /* int c, count=0; */
-  /* while((c = fgetc(fp)) != EOF) { */
-  /* string->data[count++] = c; */
-  /* } */
-  /* fclose(fp); */
-  return;
-}
-
 
 #endif
 
