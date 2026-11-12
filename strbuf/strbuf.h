@@ -6,21 +6,21 @@
 #include <stdbool.h>
 #include "../types.h"
 
-#define MAX_SIZE 256
+#define MAX_SIZE 1024
 
 // TODO :: some type of strtok() like function that uses the strview
 // TOOD :: reverse the string-buffer with two-pointers (for-fun?)
 
 // static buffer of medium size for path or basic string manipulation tasks
 typedef struct {
-  char data[MAX_SIZE+1];
+  u8 data[MAX_SIZE+1];
   size_t len;
   size_t capacity;
 } strbuf;
 
 // pointer into the string buffer with a length
 typedef struct {
-  const char* data;
+  const u8* data;
   size_t len;
 } strview;
 
@@ -81,8 +81,8 @@ void strbuf_pop_dir(strbuf* buf) {
   fprintf(stderr, "\ncould not find directory delimiter, no work done");
 }
 
-// get slice of data from the buffer
-strview strbuf_slice(const strbuf *s, size_t start, size_t end) {
+// get view of data from the buffer
+strview strbuf_view(const strbuf *s, size_t start, size_t end) {
 
   // invalid range
   if (start > s->len || end > s->len - start) {
@@ -90,6 +90,21 @@ strview strbuf_slice(const strbuf *s, size_t start, size_t end) {
   }
 
   return (strview){ .data = s->data + start, .len = end };
+}
+
+// return copy of the buffer
+strbuf strbuf_slice(const strbuf *from, u32 start, u32 end) {
+  strbuf res;
+  strbuf_init(&res);
+
+  if(end > res.capacity || start > end)
+    return res;
+    
+  res.len = end - start;
+  memcpy(res.data, from->data + start, res.len);
+  res.data[res.len] = '\0';
+
+  return res;
 }
 
 #endif

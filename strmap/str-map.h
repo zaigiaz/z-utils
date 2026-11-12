@@ -2,7 +2,7 @@
 #include <string.h>
 #include "../types.h"
 
-#define MAP_CAPACITY 1024
+#define MAP_CAPACITY 3*1024
 #define MAX_KEY_LEN  32-1 // null terminator
 #define BUCKET_COUNT 256+1 // 256 different chars (could restrict to 26)
 #define NONE         0xFFFFu
@@ -23,6 +23,7 @@ static u32 bucket_of(const char *key) {
     return 1u + (unsigned char)key[0];
 }
 
+// TODO :: memset all the arrays here?
 static void map_init(str_map *map) {
     map->count = 0;
     for (u32 b = 0; b < BUCKET_COUNT; ++b)

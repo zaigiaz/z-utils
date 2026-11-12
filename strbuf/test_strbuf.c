@@ -19,6 +19,7 @@ int main() {
 
   strbuf_init(&path);
 
+  // append and pop_right operations ------------------------------
   strbuf_append(&path, "home/");
   printf("%s\n", path.data);
 
@@ -31,9 +32,14 @@ int main() {
   strbuf_append(&path, small_str);
   printf("\n%s and %zu", path.data, path.len);
 
+  // pop dir for pathwalking backwards ------------------------------
   strbuf_pop_dir(&path);
   printf("\n%s", path.data);
 
-  strview s = strbuf_slice(&path, 4, 9);
+  // slices that return copy of the buffer into new strbuf ------------------------------
+  strbuf s = strbuf_slice(&path, 4, 9);
   printf("\n%*s", s.len, s.data);
+
+  strbuf s_2 = strbuf_slice(&path, 5, 14);
+  printf("\n%*s", s_2.len, s_2.data);
 }

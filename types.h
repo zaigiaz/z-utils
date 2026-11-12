@@ -49,10 +49,13 @@ typedef double        f64;
 typedef ptrdiff_t     size;
 typedef unsigned char utf8;
 
+typedef uint8_t       b8;
+typedef uint32_t      b32;
+
 // length based-strings
-#define s8(s) (s8){(utf8 *)s, lengthof(s)}
+#define s8(s) (s8){(u8 *)s, lengthof(s)}
 typedef struct {
-  utf8 * data;
+  u8 * data;
   size_t len;
 } s8;
 

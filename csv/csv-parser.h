@@ -58,9 +58,13 @@ struct result_list {
   result_list * next;
 }; 
 
-void csv_rdr_init();
+void csv_rdr_init(csv_rdr * rdr, char delim);
 bool is_delim(csv_rdr* r, char c);
 void dsl_parse(dsl_rdr * d, const char* c);
+
+void csv_rdr_init(csv_rdr* rdr, char my_delim) {
+  rdr->delim = my_delim;  
+}
 
 bool is_delim(csv_rdr *r, char c) {
     return c == r->delim || c == '\n' || c == '\r';
