@@ -10,13 +10,16 @@ int main() {
   strbuf path;
   dsl_rdr myrdr;
 
-  dsl_parse(&myrdr, "s-f-i-i-b-s");
+  dsl_parse(&myrdr, "i-f-b-s-i-b");
   printf("DSL_STRING: ");
   for(size_t i=0; i<myrdr.len; i++) {
-    printf("%d", myrdr.dsl_str[i]);
-    if(i == myrdr.len-1) { printf("\n"); }
-  }
+    if(myrdr.dsl_str[i] == DELIM)
+      continue;
 
+    printf("%d", myrdr.dsl_str[i]);
+  }
+  printf("\n");
+  
   strbuf_init(&path);
 
   // append and pop_right operations ------------------------------

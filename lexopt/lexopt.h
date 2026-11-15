@@ -26,7 +26,7 @@ char argv_opt(char *argv[]) {
   }
 
   if(pos < 0 || vec[arg] == NULL ||
-     vec[arg][0] != '-' || vec[arg][1] == '\0') {
+    vec[arg][0] != '-' || vec[arg][1] == '\0') {
     pos = -1;
     return('\0');
   }

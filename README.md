@@ -2,26 +2,27 @@
 Implemented Data Structures and utilities in C
 collection of parsers and other header libraries I created for personal use in projects
 
-The dyn_arrays and hash_table were written months ago when I was a much worse programmer, so I will probably rewrite in the future.
-I will add Memory Allocators and ring-buffers, queues, stacks, linked-list, etc later.
-
 # current 
 
-- Dynamic Arrays (not used)
-- String-Buffers
-- CSV Parser
+- str8   (length based u8 string)
+- strbuf (buffer string type for bufio purposes)
+- strmap (simple first-pass bucket associative array (non-hashing))
+- CSV Parser 
+- Ini Parser
+- Pool and Arena Allocaters
 
 # Planned
 
 - prng random numbers
-- file-formats
+- file-formats (csv, ini, and custom)
 - better lexopt or cmdline wrapper
-- custom memory allocater
-- range and vector types? (not-needed for now)
-- stack or queue functions that are just wrappers around void pointers? swap-back support
-
-Then a basic .ini file format based off of strbuf and strmap
-and basic .csv or .dat handling for any projects I have in the future.
+- custom memory allocater (Pool + Arena Characteristics)
+- range and vector/matrix types? (not-needed for now)
+- stack or queue functions just built off either linked-lists or arrays
+- Linux Daemon and Shell utilities (Launch Processes etc.)
+- Path Iteration (Find Root, Split, Iteration)
+- Helper Macros
+- Formatted String like sprintf but very simple for str8, can insert into strmap or buf
 
 ## Simpler Commands
 
@@ -44,3 +45,5 @@ for programs, and maybe support for more complex parsing later on.
 - https://hackaday.com/2024/12/19/better-c-strings-simply/
   Good discussion here about string types in C and C++
 
+- https://github.com/jamesroutley/write-a-hash-table/tree/master
+  great repository for learning about hash-table implementation

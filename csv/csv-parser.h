@@ -11,11 +11,14 @@
 
 // delimiter is anything of our choosing, so we could read .dat files as well
 
-// TODO :: if schema breaks then return null or?
-// TODO :: whats the return structure of the api? a linked list?
+// PLAN :: if schema breaks then return null or?
+// PLAN :: whats the return structure of the api? a linked list?
 //         or just expect hand-rolled solution per-project?
 
 // TODO :: Reset, Clear, and other functions for the reader
+
+// TODO :: write out optional logic for the reader, so we can have optional return values and can have malformed data in some cases?
+// TODO :: need arena allocater or pool allocater for all these linked lists BRUH
 
 // 8 KB init-size
 #define CSV_SIZE 8*1024
@@ -48,25 +51,26 @@ union data_t {
   i32 number_t;
   f32 float_t;
   char * str_t;
-  bool bool_t;
+  b32 bool_t;
 };
 
 typedef struct result_list result_list;
 struct result_list {
   csv_type tok_type;
   union data_t data;
+  b8 optional;
   result_list * next;
 }; 
 
 void csv_rdr_init(csv_rdr * rdr, char delim);
-bool is_delim(csv_rdr* r, char c);
+b32 is_delim(csv_rdr* r, char c);
 void dsl_parse(dsl_rdr * d, const char* c);
 
 void csv_rdr_init(csv_rdr* rdr, char my_delim) {
   rdr->delim = my_delim;  
 }
 
-bool is_delim(csv_rdr *r, char c) {
+b32 is_delim(csv_rdr *r, char c) {
     return c == r->delim || c == '\n' || c == '\r';
 }
 
@@ -88,9 +92,10 @@ void dsl_parse(dsl_rdr * d, const char* str) {
     case 'f': d->dsl_str[i] = FLOAT;   ++d->len; break;
     case 'i': d->dsl_str[i] = INTEGER; ++d->len; break;
     case 'b': d->dsl_str[i] = BOOL;    ++d->len; break;
-
     case '-': 
-      break; // we skip delimiter and end of string
+    case ':':
+      d->dsl_str[i] = DELIM;    ++d->len; 
+      break;
 
     default:
       fprintf(stderr, "\ntoken shouln't exist in dsl string");

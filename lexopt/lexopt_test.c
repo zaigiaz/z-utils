@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "lexopt.h"
+#include "bigopt.h"
 
 int main(int argc, char *argv[]) {
 
