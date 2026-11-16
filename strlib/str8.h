@@ -6,14 +6,14 @@
 // and make them into a general string type. This is possible but was kind of awkward.
 // I ended up just defaulting to my later strbuf design later.
 
-s8 str_append(s8 first, char * txt);
-s8 str_trim_right_dirty(s8 first, char * txt);
-s8 str_trim_right(s8 first, usize trm);
-s8 str_trim_left(s8 first, usize trm);
-s8 slice(s8 string, usize left, usize right);
+str8 str_append(s8 first, char * txt);
+str8 str_trim_right_dirty(s8 first, char * txt);
+str8 str_trim_right(s8 first, usize trm);
+str8 str_trim_left(s8 first, usize trm);
+str8 slice(s8 string, usize left, usize right);
 
 // add reallocate logic plz
-s8 str_append(s8 first, char * txt) {
+str8 str_append(s8 first, char * txt) {
   usize iter = strlen(first.data);
 
   for(iter; iter<first.len; iter++) {
@@ -24,7 +24,7 @@ s8 str_append(s8 first, char * txt) {
 }
 
 // chop off from end of string, but data still exists
-s8 str_trim_right_dirty(s8 first, char * txt) {
+str8 str_trim_right_dirty(str8 first, char * txt) {
   usize iter = strlen(txt);
   first.len = first.len - iter;  
   
@@ -32,9 +32,9 @@ s8 str_trim_right_dirty(s8 first, char * txt) {
 }
 
 // allocate a new string instead of just changing the lenght in the type
-s8 str_trim_right(s8 first, usize trm) {
+str8 str_trim_right(str8 first, usize trm) {
 
-  s8 newstr;
+  str8 newstr;
 
   usize j=0;
   usize new_end = first.len - trm;
@@ -48,11 +48,12 @@ s8 str_trim_right(s8 first, usize trm) {
   return newstr;
 }
 
-// allocate new copy unless we include two pointers in s8 impl
+// allocate new copy unless we include two pointers in str8 impl
 // this is slightly more expensive but should happen rarely
-s8 str_trim_left(s8 first, usize trm) {
+// TODO :: rewrite this without for-loop, either memcpy or 
+str8 str_trim_left(str8 first, usize trm) {
 
-  s8 newstr;
+  str8 newstr;
   usize j=0;
 
   newstr.len = first.len - trm;  
@@ -64,7 +65,8 @@ s8 str_trim_left(s8 first, usize trm) {
   return newstr;
 }
 
-s8 slice(s8 string, usize left, usize right) {
+// TODO :: same as strbuf logic
+str8 slice(str8 string, usize left, usize right) {
   printf("implement here");
 }
 

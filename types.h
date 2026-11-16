@@ -10,7 +10,7 @@
 // simple helpful macros
 #define countof(a)    (size)(sizeof(a) / sizeof(*(a)))
 #define lengthof(s)   (countof(s) - 1)
-#define countbits(x) (sizeof(x) * 8)
+#define countbits(x) (sizeof((x)) * 8)
 
 #define MIN(_a, _b)\
 ({\     typeof(_a) _valA = (_a);\
@@ -53,10 +53,10 @@ typedef uint8_t       b8;
 typedef uint32_t      b32;
 
 // length based-strings
-#define s8(s) (s8){(u8 *)s, lengthof(s)}
+#define str8(s) (s8){(u8 *)s, lengthof(s)}
 typedef struct {
   u8 * data;
   size_t len;
-} s8;
+} str8;
 
 #endif
