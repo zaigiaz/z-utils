@@ -10,6 +10,7 @@ int main() {
   strbuf path;
   dsl_rdr myrdr;
 
+  // test dsl-parse ------------------------------
   dsl_parse(&myrdr, "i-f-b-s-i-b");
   printf("DSL_STRING: ");
   for(size_t i=0; i<myrdr.len; i++) {
@@ -18,8 +19,8 @@ int main() {
 
     printf("%d", myrdr.dsl_str[i]);
   }
-  printf("\n");
-  
+
+  printf("\n");  
   strbuf_init(&path);
 
   // append and pop_right operations ------------------------------
@@ -45,4 +46,6 @@ int main() {
 
   strbuf s_2 = strbuf_slice(&path, 5, 14);
   printf("\n%*s", s_2.len, s_2.data);
+
+  return 0;
 }

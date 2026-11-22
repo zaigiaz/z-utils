@@ -23,6 +23,9 @@ collection of parsers and other header libraries I created for personal use in p
 - Path Iteration (Find Root, Split, Iteration)
 - Helper Macros
 - Formatted String like sprintf but very simple for str8, can insert into strmap or buf
+- regex or peg for string processing?
+- tiny apl-like dialect/dsl for processing array-types
+
 
 ## Simpler Commands
 
@@ -47,3 +50,5 @@ for programs, and maybe support for more complex parsing later on.
 
 - https://github.com/jamesroutley/write-a-hash-table/tree/master
   great repository for learning about hash-table implementation
+
+- regex engine in 30 lines :: https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html

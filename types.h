@@ -1,16 +1,25 @@
 #ifndef DECLARES_H
 #define DECLARES_H
 
+#include <stdio.h> // for error macro
 #include <stdint.h>
 #include <stddef.h>
 
 // some snippets from https://nullprogram.com/blog/2023/10/08/ and other places on the web
 // and some of my own extensions for making C more "modern"
 
+// PLAN :: re-eval min and max macros, and ptrdiff, uintptr typedefs at some point
+
 // simple helpful macros
 #define countof(a)    (size)(sizeof(a) / sizeof(*(a)))
 #define lengthof(s)   (countof(s) - 1)
 #define countbits(x) (sizeof((x)) * 8)
+
+// for printf debugging, formatted for emacs compile-mode
+#define ERR_EXIT(err_str) do {						\
+    fprintf(stderr, "%s:%d: exit_error: %s", __FILE__, __LINE__, (err_str)); \
+    exit(1);								\
+  }  while (0)
 
 #define MIN(_a, _b)\
 ({\     typeof(_a) _valA = (_a);\
