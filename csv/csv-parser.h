@@ -21,7 +21,7 @@
 // TODO :: need arena allocater or pool allocater for all these linked lists BRUH
 
 // 8 KB init-size
-#define CSV_SIZE 8*1024
+#define CSV_SIZE 4*1024
 
 typedef enum : u8 {
   STRING,
@@ -81,10 +81,7 @@ void dsl_parse(dsl_rdr * d, const char* str) {
 
   // 32 inputs + 31 delimiters = 63 total chars
   size_t input_len = strlen(str);
-  if(input_len > 63) {
-    fprintf(stderr, "\ncannot have more than 32 fields in csv_string, or string malformed");
-    exit(1);
-  }
+  if(input_len > 63) { ERR_EXIT("\ncannot have more than 32 fields in csv_string, or string malformed"); }
 
   for(size_t i=0; i<input_len; i++) {
     switch(str[i]) {

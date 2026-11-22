@@ -9,27 +9,22 @@
 // and some of my own extensions for making C more "modern"
 
 // PLAN :: re-eval min and max macros, and ptrdiff, uintptr typedefs at some point
+// 
 
 // simple helpful macros
 #define countof(a)    (size)(sizeof(a) / sizeof(*(a)))
 #define lengthof(s)   (countof(s) - 1)
 #define countbits(x) (sizeof((x)) * 8)
 
-// for printf debugging, formatted for emacs compile-mode
+// for printf debugging, formatted for emacs compile-mode --------------------
 #define ERR_EXIT(err_str) do {						\
     fprintf(stderr, "%s:%d: exit_error: %s", __FILE__, __LINE__, (err_str)); \
     exit(1);								\
   }  while (0)
 
-#define MIN(_a, _b)\
-({\     typeof(_a) _valA = (_a);\
-	typeof(_b) _valB = (_b);\
-	_valA < _valB ? _valA : _valB;\ })
-
-#define MAX(_a, _b)\
-({\    typeof(_a) _valA = (_a);\
-       typeof(_b) _valB = (_b);\
-       _valA > _valB ? _valA : _valB;\ })
+#define ERR_WARN(err_str) do {						\
+    fprintf(stderr, "%s:%d: warn: %s", __FILE__, __LINE__, (err_str)); \
+  }  while (0)
 
 // useful attributes
 #define CACHE_LINE 64
@@ -62,10 +57,18 @@ typedef uint8_t       b8;
 typedef uint32_t      b32;
 
 // length based-strings
-#define str8(s) (s8){(u8 *)s, lengthof(s)}
+#define str8(s) (str8){(u8 *)s, lengthof(s)}
 typedef struct {
   u8 * data;
   size_t len;
 } str8;
+
+// length based array :: EXPERIMENT
+#define array(a) (array){ .data=(a), .len=countof((a)) }
+#define array_at(a, type, i) (((type *)(a).data)[i])
+typedef struct {
+  void * data;
+  size_t len;
+} array;
 
 #endif
