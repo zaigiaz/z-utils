@@ -1,7 +1,8 @@
 #ifndef DECLARES_H
 #define DECLARES_H
 
-#include <stdio.h> // for error macro
+#include <stdio.h> 
+#include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -9,22 +10,23 @@
 // and some of my own extensions for making C more "modern"
 
 // PLAN :: re-eval min and max macros, and ptrdiff, uintptr typedefs at some point
-// 
+// PLAN :: rethink slices, implement arenas real quick
 
 // simple helpful macros
-#define countof(a)    (size)(sizeof(a) / sizeof(*(a)))
+#define countof(a)    (ptrdiff_t)(sizeof(a) / sizeof(*(a)))
 #define lengthof(s)   (countof(s) - 1)
 #define countbits(x) (sizeof((x)) * 8)
 
 // for printf debugging, formatted for emacs compile-mode --------------------
-#define ERR_EXIT(err_str) do {						\
-    fprintf(stderr, "%s:%d: exit_error: %s", __FILE__, __LINE__, (err_str)); \
-    exit(1);								\
+#define error_warn(err_str) do {					\
+    fprintf(stderr, "%s:%d: warn: %s", __FILE__, __LINE__, (err_str));	\
   }  while (0)
 
-#define ERR_WARN(err_str) do {						\
-    fprintf(stderr, "%s:%d: warn: %s", __FILE__, __LINE__, (err_str)); \
-  }  while (0)
+#define error_exit(err_str) error_warn(err_str); exit(1);
+
+// Iteration Macros
+#define Range(lo, hi) (sz i=lo; i<hi; i++)
+#define ReverseRange(lo, hi) (sz i=hi; i>lo; i--)
 
 // useful attributes
 #define CACHE_LINE 64
@@ -36,7 +38,7 @@
 #define ALIGN(_size)      __attribute__((aligned(_size)))
 #define NO_RETURN         __attribute__((noreturn))
 
-// signed types
+// signed and unsigned types
 typedef uint8_t       u8;
 typedef uint16_t      u16;
 typedef uint32_t      u32;
@@ -50,25 +52,22 @@ typedef int64_t       i64;
 typedef float         f32;
 typedef double        f64;
 
-typedef ptrdiff_t     size;
 typedef unsigned char utf8;
 
+typedef ptrdiff_t size;
+typedef void *rawptr;
+typedef size_t sz;
+
+// booleans
 typedef uint8_t       b8;
 typedef uint32_t      b32;
 
 // length based-strings
-#define str8(s) (str8){(u8 *)s, lengthof(s)}
+#define string(s) (string){(u8 *)s, lengthof(s)}
 typedef struct {
   u8 * data;
-  size_t len;
-} str8;
+  sz len;
+} string;
 
-// length based array :: EXPERIMENT
-#define array(a) (array){ .data=(a), .len=countof((a)) }
-#define array_at(a, type, i) (((type *)(a).data)[i])
-typedef struct {
-  void * data;
-  size_t len;
-} array;
 
 #endif

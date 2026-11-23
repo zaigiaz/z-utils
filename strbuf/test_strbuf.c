@@ -22,7 +22,7 @@ int main() {
 
   printf("\n");  
   strbuf_init(&path);
-
+ 
   // append and pop_right operations ------------------------------
   strbuf_append(&path, "home/");
   printf("%s\n", path.data);

@@ -81,7 +81,7 @@ void dsl_parse(dsl_rdr * d, const char* str) {
 
   // 32 inputs + 31 delimiters = 63 total chars
   size_t input_len = strlen(str);
-  if(input_len > 63) { ERR_EXIT("\ncannot have more than 32 fields in csv_string, or string malformed"); }
+  if(input_len > 63) { error_exit("\ncannot have more than 32 fields in csv_string, or string malformed"); }
 
   for(size_t i=0; i<input_len; i++) {
     switch(str[i]) {

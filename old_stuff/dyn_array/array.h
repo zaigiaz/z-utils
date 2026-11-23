@@ -48,7 +48,6 @@ void insert(Array *a, int element, size_t index) {
   a->array[index] = element;
 }
 
-
 void delete(Array *a, size_t index) {
 
   assert(index <= a->count);

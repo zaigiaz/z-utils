@@ -7,6 +7,8 @@
 #define BUCKET_COUNT 256+1 // 256 different chars (could restrict to 26)
 #define NONE         0xFFFFu
 
+// TODO :: make this type generic with a macro like strmap(s) which would gen the struct?
+
 typedef struct {
     char keys[MAP_CAPACITY][MAX_KEY_LEN + 1];
     u32 values[MAP_CAPACITY];
@@ -23,7 +25,6 @@ static u32 bucket_of(const char *key) {
     return 1u + (unsigned char)key[0];
 }
 
-// TODO :: memset all the arrays here?
 static void map_init(str_map *map) {
     map->count = 0;
     for (u32 b = 0; b < BUCKET_COUNT; ++b)
@@ -47,8 +48,8 @@ static bool map_insert(str_map *map, const char *key, u32 value) {
     }
 
     if(map->count == MAP_CAPACITY) {
-        fprintf(stderr, "At total map capacity for the str_map");
-        return false;
+      error_warn("At total map capacity for the str_map");
+      return false;
     }
 
     u16 i = map->count++;

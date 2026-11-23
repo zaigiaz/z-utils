@@ -36,7 +36,7 @@ void strbuf_clear(strbuf * buf) {
 
 void strbuf_append(strbuf * buf, const char *txt) {
 
-  if(buf->len > buf->capacity) { ERR_EXIT("len is greater than capacity"); }
+  if(buf->len > buf->capacity) { error_exit("len is greater than capacity"); }
   
   size_t n = strlen(txt);
   if(n > (buf->capacity - buf->len)) {
@@ -51,7 +51,7 @@ void strbuf_append(strbuf * buf, const char *txt) {
 // pop amount of top of buffer
 void strbuf_pop_right(strbuf* buf, size_t amt) {
 
-  if(amt > buf->len) { ERR_EXIT("cant pop more than the entire buffer"); }
+  if(amt > buf->len) { error_exit("cant pop more than the entire buffer"); }
 
   buf->len -= (amt-1);
   buf->data[buf->len] = '\0';
