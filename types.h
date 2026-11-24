@@ -69,9 +69,21 @@ typedef struct {
   sz len;
 } string;
 
-// arena implementation ------------------------------
+// small bitmap
+typedef struct {
+  u8 data[8];
+  u16 cap;
+} bmap;
 
+void bmap_init(bmap * bmap) {
+  memset(bmap->data, 0, sizeof(bmap->data));
+  bmap->cap = countbits(bmap->data);			
+}
 
+// bitset helpers
+static b8 bit_get(const u8 *bmap, u16 i) { return (bmap[i / 8] & (u8)(1u << (i % 8))) != 0; }
+static void bit_set(u8 *bmap, u16 i) { bmap[i / 8] |= (u8)(1u << (i % 8)); }
+static void bit_clear(u8 *bmap, u16 i) { bmap[i / 8] &= (u8)~(1u << (i % 8)); }
 
 
 #endif
