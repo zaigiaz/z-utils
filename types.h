@@ -13,9 +13,10 @@
 // PLAN :: rethink slices, implement arenas real quick
 
 // simple helpful macros
-#define countof(a)    (ptrdiff_t)(sizeof(a) / sizeof(*(a)))
-#define lengthof(s)   (countof(s) - 1)
+#define countof(a)   (ptrdiff_t)(sizeof(a) / sizeof(*(a)))
+#define lengthof(s)  (countof(s) - 1)
 #define countbits(x) (sizeof((x)) * 8)
+#define mem_zero(x)  (memset((x), 0, sizeof((x))))
 
 // for printf debugging, formatted for emacs compile-mode --------------------
 #define error_warn(err_str) do {					\
@@ -25,8 +26,8 @@
 #define error_exit(err_str) error_warn(err_str); exit(1);
 
 // Iteration Macros
-#define Range(lo, hi) (sz i=lo; i<hi; i++)
-#define ReverseRange(lo, hi) (sz i=hi; i>lo; i--)
+#define Range(lo, hi, iter) (sz (iter)=lo; (iter)<hi; (iter)++)
+#define ReverseRange(lo, hi, iter) (sz (iter)=hi; (iter)>lo; (iter)--)
 
 // useful attributes
 #define CACHE_LINE 64
@@ -69,21 +70,20 @@ typedef struct {
   sz len;
 } string;
 
-// small bitmap
+// small bitmap (64 bits)
 typedef struct {
-  u8 data[8];
+  u8 data[8]; 
   u16 cap;
 } bmap;
 
 void bmap_init(bmap * bmap) {
-  memset(bmap->data, 0, sizeof(bmap->data));
+  mem_zero(bmap->data);
   bmap->cap = countbits(bmap->data);			
 }
 
 // bitset helpers
-static b8 bit_get(const u8 *bmap, u16 i) { return (bmap[i / 8] & (u8)(1u << (i % 8))) != 0; }
-static void bit_set(u8 *bmap, u16 i) { bmap[i / 8] |= (u8)(1u << (i % 8)); }
-static void bit_clear(u8 *bmap, u16 i) { bmap[i / 8] &= (u8)~(1u << (i % 8)); }
-
+static b8 bit_get(const bmap *b, u16 i) { return (b->data[i / 8] & (u8)(1u << (i % 8))) != 0; }
+static void bit_set(bmap *b, u16 i) { b->data[i / 8] |= (u8)(1u << (i % 8)); }
+static void bit_clear(bmap *b, u16 i) { b->data[i / 8] &= (u8)~(1u << (i % 8)); }
 
 #endif
