@@ -4,21 +4,25 @@
 #include <string.h>
 #include "../types.h"
 
-// re-implement with arenas
-string str_append_cstring(string first, char * txt);
+// TODO :: re-implement with arenas
+string str_append_cstring(string s, char * txt, Arena *arena);
 
 // TODO :: create these functions
-string str_append(string first, string txt, Arena *arena);
+string str_append(string s, string txt, Arena *arena);
 string str_has_prefix(string str, string prefix);
 string str_has_suffix(string str, string suffix);
-string str_to_integer(string first);
-string integer_to_string(string first, u64 number);
-b32 str_eq(string first, string second);
+b32 str_eq(string a, string b);
 
-// TODO :: re-think these
-string str_trim_right_dirty(string first, sz amt);
-string str_trim_right(string first, sz trm);
-string str_trim_left(string first, sz trm);
+// TODO :: conversion functions to numbers
+i32 str_to_integer(string s);
+string int_to_str(i32 num);
+f32 str_to_float(string s);
+string float_to_str(f32 num);
+
+// TODO :: re-think these (slice and trim types)
+string str_trim_right(string s, sz trm);
+string str_trim_left(string s, sz trm);
+string string_copy_slice(string s);
 
 // TODO :: FINISH
 string str_append(string first, string second, Arena * arena) {
@@ -26,7 +30,7 @@ string str_append(string first, string second, Arena * arena) {
 }
 
 // TODO :: add reallocate logic plz with arena
-string str_append_cstring(string first, char * txt) {
+string str_append_cstring(string s, char * txt) {
   sz iter = strlen(txt);
 
   /* for(iter; iter<first.len; iter++) { */
@@ -37,47 +41,17 @@ string str_append_cstring(string first, char * txt) {
   return first;
 }
 
+string string_copy_slice(string a) {
+  return 0;
+}
+
 // chop off from end of string, but data still exists
-string str_trim_right_dirty(string first, sz amt) {
+string str_trim_right_dirty(string s, sz amt) {
   if (first.len < amt) error_exit("cant trim more than the entire string length");
   first.len = first.len - amt;    
   return first;
 }
 
-// allocate a new string instead of just changing the lenght in the type
-string str_trim_right(string first, sz trm) {
-
-  string newstr;
-
-  sz j=0;
-  sz new_end = first.len - trm;
-  newstr.len = new_end;
-  
-  /* for(sz i=first.len; i>new_end; i--) { */
-  for ReverseRange(first.len, new_end) {
-    newstr.data[j] = first.data[i];
-    j++;
-  }
-
-  return newstr;
-}
-
-// allocate new copy unless we include two pointers in str8 impl
-// this is slightly more expensive but should happen rarely
-// TODO :: rewrite this without for-loop, either memcpy or 
-string str_trim_left(string first, sz trm) {
-
-  string newstr;
-  sz j=0;
-
-  newstr.len = first.len - trm;  
-  for Range(trm, first.len) {
-    newstr.data[j] = first.data[i];
-    j++;
-  }
-
-  return newstr;
-}
 
 #endif
 
