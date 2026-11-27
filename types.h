@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 // some snippets from https://nullprogram.com/blog/2023/10/08/ and other places on the web
 // and some of my own extensions for making C more "modern"
@@ -28,6 +29,10 @@
 // Iteration Macros
 #define Range(lo, hi, iter) (sz (iter)=lo; (iter)<hi; (iter)++)
 #define ReverseRange(lo, hi, iter) (sz (iter)=hi; (iter)>lo; (iter)--)
+
+// no stdbool here (in case we arent using c23)
+#define true 1
+#define false 0
 
 // useful attributes
 #define CACHE_LINE 64
@@ -70,20 +75,22 @@ typedef struct {
   sz len;
 } string;
 
-// small bitmap (64 bits)
 typedef struct {
-  u8 data[8]; 
-  u16 cap;
-} bmap;
+  u64 data;
+  u8 cap;
+} bset;
 
-void bmap_init(bmap * bmap) {
-  mem_zero(bmap->data);
-  bmap->cap = countbits(bmap->data);			
+void bset_init(bset * bset) {
+  bset->data = 0;
+  bset->cap = 64;
 }
 
-// bitset helpers
-static b8 bit_get(const bmap *b, u16 i) { return (b->data[i / 8] & (u8)(1u << (i % 8))) != 0; }
-static void bit_set(bmap *b, u16 i) { b->data[i / 8] |= (u8)(1u << (i % 8)); }
-static void bit_clear(bmap *b, u16 i) { b->data[i / 8] &= (u8)~(1u << (i % 8)); }
+static void bset_clear_all(bset * b)        { b->data = 0; }
+static b8   bset_any(bset * b, u64 mask)    { return (b->data & mask) != 0; }
+static b8   bset_all(bset * b, u64 mask)    { return (b->data & mask) == 0; }
+static void bset_set(bset * b, u64 mask)    { b->data |= mask;  }
+static void bset_clear(bset * b, u64 mask)  { b->data &= ~mask; }
+static void bset_toggle(bset * b, u64 mask) { b->data ^= mask;  }
+static b8   bset_get_index(bset *b, u8 idx) { return (b->data >> idx) & 1u; };
 
 #endif

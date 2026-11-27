@@ -47,5 +47,7 @@ int main() {
   strbuf s_2 = strbuf_slice(&path, 5, 14);
   printf("\n%*s", s_2.len, s_2.data);
 
+  b8 val = true;
+
   return 0;
 }
